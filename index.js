@@ -26,7 +26,7 @@ console.log(error)
 const app=express();
 app.use(express.json());
 app.use(cors({
-    origin: process.env.FRONT_URL,
+    origin:'https://realstate4-q8lsvtei.b4a.run',
     methods:["GET","POST","DELETE","PUT"],
     allowedHeaders:[
         "Content-Type",
