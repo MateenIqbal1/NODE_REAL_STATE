@@ -26,7 +26,7 @@ console.log(error)
 const app=express();
 app.use(express.json());
 app.use(cors({
-    origin: '*' ,
+    origin: process.env.FRONT_URL,
     methods:["GET","POST","DELETE","PUT"],
     allowedHeaders:[
         "Content-Type",
@@ -45,7 +45,10 @@ app.listen(PORT, (error) =>{
         console.log("Error occurred, server can't start", error);
     }
 );
-
+app.options("*", cors({
+    origin: process.env.FRONT_URL,
+    credentials: true,
+}));
 app.use('/api/user',userRouter);
 app.use('/api/auth',authRouter);
 app.use('/api/listing',listingRoute);
