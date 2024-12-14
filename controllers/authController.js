@@ -25,8 +25,6 @@ try {
     const token= jwt.sign({id:validUser._id},process.env.JWT_SECRET);
     const {password:pass,...rest}=validUser._doc;
     res.cookie('access_token', token, {
-      httpOnly: false,    // Allow JavaScript to access the cookie (for debugging, use true for security in production)
-      secure: false,      // Set to true if using HTTPS (for production)
       sameSite: 'None',   // Allow cookies in cross-origin requests
       maxAge: 7200000,    // Set expiration time to 2 hours (in milliseconds)
     }).status(200).json(rest);
@@ -53,8 +51,7 @@ export const google=async(req,res,next)=>{
       const token= jwt.sign({id:newUser._id},process.env.JWT_SECRET);
       const {password:pass,...rest}=newUser._doc;
       res.cookie('access_token', token, {
-        httpOnly: false,    // Allow JavaScript to access the cookie (for debugging, use true for security in production)
-        secure: false,      // Set to true if using HTTPS (for production)
+       // Set to true if using HTTPS (for production)
         sameSite: 'None',   // Allow cookies in cross-origin requests
         maxAge: 7200000,    // Set expiration time to 2 hours (in milliseconds)
       }).status(200).json(rest);
