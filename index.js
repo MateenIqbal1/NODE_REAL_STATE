@@ -32,7 +32,8 @@ app.use(
       methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
       credentials: true, // Allow credentials (cookies) to be sent
     })
-  );app.use(cookieParser());
+  );
+  app.use(cookieParser());
 app.listen(PORT, (error) =>{
     if(!error)
         console.log("Server is listening on port "+ PORT);

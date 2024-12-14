@@ -25,7 +25,7 @@ try {
     const token= jwt.sign({id:validUser._id},process.env.JWT_SECRET);
     const {password:pass,...rest}=validUser._doc;
     res.cookie('access_token', token, {
-      httpOnly:true
+      httpOnly: false, secure: false
     }).status(200).json(rest);
     
 } catch (error) {
@@ -50,9 +50,7 @@ export const google=async(req,res,next)=>{
       const token= jwt.sign({id:newUser._id},process.env.JWT_SECRET);
       const {password:pass,...rest}=newUser._doc;
       res.cookie('access_token', token, {
-       // Set to true if using HTTPS (for production)
-       httpOnly:true
-       // Set expiration time to 2 hours (in milliseconds)
+       httpOnly: false, secure: false
       }).status(200).json(rest);
       
 
