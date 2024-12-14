@@ -25,8 +25,14 @@ console.log(error)
 
 const app=express();
 app.use(express.json());
-app.use(cors());
-app.use(cookieParser());
+
+app.use(
+    cors({
+      origin: true, // Accept requests from all origins
+      methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+      credentials: true, // Allow credentials (cookies) to be sent
+    })
+  );app.use(cookieParser());
 app.listen(PORT, (error) =>{
     if(!error)
         console.log("Server is listening on port "+ PORT);
