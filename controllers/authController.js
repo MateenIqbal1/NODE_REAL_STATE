@@ -24,10 +24,13 @@ try {
     if(!validPassword) return next(errorHandler(401,'wrong credentials'));
     const token= jwt.sign({id:validUser._id},process.env.JWT_SECRET);
     const {password:pass,...rest}=validUser._doc;
-    res.cookie('access_token', token, {
-      httpOnly: false, secure: false
-    }).status(200).json(rest);
-    
+    res.status(200).json({
+      success:true,
+      message:'Logged in successfully',
+      token,
+      rest
+    })
+
 } catch (error) {
     next(error)
 }
@@ -40,8 +43,12 @@ export const google=async(req,res,next)=>{
     if(user){
       const token= jwt.sign({id:user._id},process.env.JWT_SECRET);
       const {password:pass,...rest}=user._doc;
-      res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest);
-
+      res.status(200).json({
+        success:true,
+        message:'Logged in successfully',
+        token,
+        rest
+      })
     }else{
       const generatedPassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
       const hashedpassword=bcryptjs.hashSync(generatedPassword,10);
@@ -49,10 +56,12 @@ export const google=async(req,res,next)=>{
       await newUser.save();
       const token= jwt.sign({id:newUser._id},process.env.JWT_SECRET);
       const {password:pass,...rest}=newUser._doc;
-      res.cookie('access_token', token, {
-       httpOnly: false, secure: false
-      }).status(200).json(rest);
-      
+      res.status(200).json({
+        success:true,
+        message:'Logged in successfully',
+        token,
+        rest
+      })
 
     }
   } catch (error) {
@@ -61,7 +70,11 @@ export const google=async(req,res,next)=>{
 }
 
 export const checkVerified = (req, res) => {
-  const token = req.cookies.access_token;
+  const authHeader = req.headers['authorization']
+  if (!authHeader) {
+    return res.status(401).json({ isLoggedIn: false, message: 'Authorization header missing' });
+  }
+  const token = authHeader.split(' ')[1]
   if (!token) {
     return res.status(401).json({ isLoggedIn: false });
   }
@@ -74,7 +87,7 @@ export const checkVerified = (req, res) => {
 };
 export const signOut=async(req,res,next)=>{
   try {
-    res.clearCookie('access_token');
+    res.clearCookie('token');
     res.status(200).json('logged out successfully');
   } catch (error) {
     next(error);

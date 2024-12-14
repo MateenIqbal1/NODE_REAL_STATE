@@ -8,7 +8,7 @@ import listingRoute from './routes/listingRoute.js'
 import {router as imageRoutes} from './routes/imageRoutes.js'
 import cors from 'cors'
 import path from 'path'
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ;
 dotenv.config();
 
 const DATABASE_URL=process.env.MONGO_URL
@@ -25,15 +25,19 @@ console.log(error)
 
 const app=express();
 app.use(express.json());
-
-app.use(
-    cors({
-      origin: true, // Accept requests from all origins
-      methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
-      credentials: true, // Allow credentials (cookies) to be sent
-    })
-  );
-  app.use(cookieParser());
+app.use(cors({
+    origin: '*' ,
+    methods:["GET","POST","DELETE","PUT"],
+    allowedHeaders:[
+        "Content-Type",
+        "Authorization",
+        "Cache-Control",
+        "Expires",
+        "Pragma",
+    ],
+    credentials:true
+}));
+app.use(cookieParser());
 app.listen(PORT, (error) =>{
     if(!error)
         console.log("Server is listening on port "+ PORT);
