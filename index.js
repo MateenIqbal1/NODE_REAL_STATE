@@ -26,17 +26,19 @@ console.log(error)
 const app=express();
 app.use(express.json());
 app.use(cors({
-    origin:'https://realstate4-q8lsvtei.b4a.run',
-    methods:["GET","POST","DELETE","PUT"],
-    allowedHeaders:[
-        "Content-Type",
-        "Authorization",
-        "Cache-Control",
-        "Expires",
-        "Pragma",
-    ],
-    credentials:true
+    origin: (origin, callback) => {
+        callback(null, origin); // Dynamically set the origin
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*'); // Dynamically set origin
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allow credentials
+    next();
+});
+
 app.use(cookieParser());
 app.listen(PORT, (error) =>{
     if(!error)
